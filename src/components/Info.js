@@ -1,17 +1,20 @@
 import React from 'react';
 
-export default class Info extends React.Component{
-    render(){
-        return(
-            <div>
-                {this.props.name && 
+const Info = (props) => {
+    return (
+        <div>
+            {props.name &&
                 <div>
-                    <p>{this.props.name}</p>
-                    <p>{this.props.temp}</p>
+                    <p>{props.name}</p>
+                    <p>{props.temp}</p>
+                    <p>{props.temp_min}</p>
+                    <p>{props.temp_max}</p>
+                    <p>{props.wind_speed}</p>
                 </div>
-                }
-                <p>{this.props.error}</p>
-            </div>
-        )
-    }
+            }
+            <p>{props.error}</p>
+        </div>
+    )
 }
+
+export default Info;
