@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Form = (props) => {
+const Form = ({getWeatherByCity, getWeatherByLocation}) => {
     return (
         <form>
+            <input type="radio" id="first_api" name="api"/>
+            <input type="radio" id="second_api" name="api"/>
             <input type="text" id="city" />
-            <button onClick={props.getWeatherByCity}>Enter</button>
-            <button onClick={props.getWeatherByLocation}>ByLocation</button>
+            <button onClick={getWeatherByCity}>Enter</button>
+            <button onClick={getWeatherByLocation}>ByLocation</button>
         </form>
     )
 }

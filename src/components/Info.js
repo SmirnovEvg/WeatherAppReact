@@ -1,18 +1,18 @@
 import React from 'react';
 
-const Info = (props) => {
+const Info = ({name, icon, temp, description, wind_speed, error}) => {
     return (
         <div>
-            {props.name &&
+            {name &&
                 <div>
-                    <p>{props.name}</p>
-                    <p>{props.temp}</p>
-                    <p>{props.temp_min}</p>
-                    <p>{props.temp_max}</p>
-                    <p>{props.wind_speed}</p>
+                    <p>{name}</p>
+                    <img src={icon} alt="Icon"/>
+                    <p>{description}</p>
+                    <p>{temp}</p>
+                    <p>{wind_speed}</p>
                 </div>
             }
-            <p>{props.error}</p>
+            <p>{error}</p>
         </div>
     )
 }
