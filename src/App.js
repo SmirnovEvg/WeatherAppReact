@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './App.css';
 import Form from './components/Form.js';
 import Info from './components/Info.js';
@@ -8,6 +9,7 @@ const API_SECOND = "ca805b796b10412f9cfc86448d61c2a5";
 
 class App extends React.Component {
 
+  
   state = {
     name: undefined,
     icon: undefined,
@@ -16,7 +18,7 @@ class App extends React.Component {
     wind_speed: undefined,
     error: undefined
   }
-
+  
   gettingWeatherByLocation = async (e) => {
     e.preventDefault();
     const getPosition = function (options) {
@@ -24,7 +26,7 @@ class App extends React.Component {
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
       });
     }
-
+    
     try {
       const position = await getPosition();
       const lat = position.coords.latitude;
@@ -69,9 +71,14 @@ class App extends React.Component {
       console.error(err.message);
     }
   }
-
-
+  
+  
   gettingWeatherByCityName = async (e) => {
+    
+    
+    
+    
+
     e.preventDefault();
     const city = document.getElementById('city').value;
     if (document.getElementById('first_api').checked) {
