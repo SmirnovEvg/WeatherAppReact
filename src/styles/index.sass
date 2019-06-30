@@ -1,0 +1,114 @@
+@font-face
+    font-family: "product"
+    src: url("../fonts/ProductSans-Thin.ttf")
+    
+body
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 100vh
+    font-family: product
+    background: linear-gradient(#3e65a4, #dcb7ad)
+    color: #fff
+
+.main-block
+    width: 500px
+    height: 300px
+    background-color: #e6e6e6
+    display: flex
+    background: linear-gradient(-0.70turn, #3e65a4 30%, #dcb7ad)
+    -webkit-box-shadow: 10px 10px 25px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 25px -6px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 25px -6px rgba(0,0,0,0.75);
+
+.info
+    width: 50%
+    padding: 30px 0 30px 15px
+    &-block
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        flex-direction: column
+        p:first-child
+            font-size: 2em
+            text-align: center
+            margin: 0 auto 20px auto
+        p:first-letter
+            text-transform: uppercase
+    &-first 
+        display: flex
+        align-items: center
+        margin-left: 0
+        img 
+            width: 50px
+            height: auto
+        p 
+            font-size: 1em
+            margin-left: 5px
+    &-second
+        display: flex
+        align-items: center
+        font-size: 2em
+        p
+            margin: 0 10px 0 0
+
+.search-block
+    display: flex
+    align-items: center
+    padding: 30px 15px 30px 0
+    form
+        display: flex
+        flex-direction: column
+        align-items: center
+        div:first-child
+            width: 100%
+            display: flex
+            justify-content: space-around
+            div
+                width: 50%
+                display: flex
+                flex-direction: column
+                align-items: center
+
+.location
+    &-block 
+        display: flex
+        margin-top: 20px
+    &-input
+        padding: 3px 5px
+        border: 1px solid #fff
+        border-radius: 15px
+        input
+            border: 0
+            background: transparent
+            color: #fff
+            font-family: product
+            width: 145px
+            padding-left: 5px
+        button
+            display: flex
+            align-items: center
+            border: 0
+            padding-right: 2px
+            cursor: pointer
+            background: transparent
+            img 
+                width: 15px
+                height: 15px
+                color: #fff
+    &-button 
+        width: 26px
+        height: 26px
+        padding: 0
+        background: transparent
+        border: 0
+        display: flex
+        justify-content: center
+        align-items: center
+        margin-left: 5px
+        cursor: pointer
+        img 
+            height: 23px
+            width: auto
+            
