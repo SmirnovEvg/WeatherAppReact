@@ -29,21 +29,35 @@ const Info = ({ name, icon, temp, description, wind_speed, error }) => {
         wind_speed = cookies.wind_speed;
     }
 
+    let result;
+    if (name) {
+        result = <div className="info-block">
+            <p>{name}</p>
+            <div className="info-second">
+                <p>{temp}º</p>
+            </div>
+            <div className="info-first">
+                <img src={icon} alt="Icon" />
+                <p>{description}</p>
+            </div>
+        </div>
+    }
+    else if (error) {
+        result = <div className="error-block">
+            <img src="images/icons8-error-cloud-filled-100.png" alt="" />
+            <p>{error}</p>
+        </div>
+    }
+    else {
+        result = <div className="welcome-block">
+            <p>Welcome <br /> to <br /> Weather App</p>
+            <img src="images/icons8-stormy-weather-48.png" alt="Icon" />
+        </div>
+    }
+
     return (
         <div className="info">
-            {name &&
-                <div className="info-block">
-                    <p>{name}</p>
-                    <div className="info-second">
-                        <p>{temp}º</p>
-                    </div>
-                    <div className="info-first">
-                        <img src={icon} alt="Icon" />
-                        <p>{description}</p>
-                    </div>
-                </div>
-            }
-            <p>{error}</p>
+            {result}
         </div>
     )
 }

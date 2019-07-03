@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.css';
 import './styles/index.sass';
+import './styles/media-quaries.sass';
 import Form from './components/Form.js';
 import Info from './components/Info.js';
 
@@ -16,7 +17,8 @@ class App extends React.Component {
     description: undefined,
     temp: undefined,
     wind_speed: undefined,
-    error: undefined
+    error: undefined,
+    checked: 'first'
   }
 
   gettingWeatherByLocation = async (e) => {
@@ -32,7 +34,7 @@ class App extends React.Component {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       if (document.getElementById('first_api').checked) {
-        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}&units=metric&lang=ru`);
+        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}&units=metric`);
         const data = await api_url.json();
 
         this.setState({
@@ -41,10 +43,11 @@ class App extends React.Component {
           description: data.weather[0].description,
           temp: Math.round(data.main.temp),
           wind_speed: Math.round(data.wind.speed),
-          error: undefined
+          error: undefined,
+          checked: 'first'
         })
       } else if (document.getElementById('second_api').checked) {
-        const api_url = await fetch(`https://api.weatherbit.io/v2.0/current?&lat=${lat}&lon=${lon}&key=${API_SECOND}&lang=ru`);
+        const api_url = await fetch(`https://api.weatherbit.io/v2.0/current?&lat=${lat}&lon=${lon}&key=${API_SECOND}`);
         const data = await api_url.json();
 
         this.setState({
@@ -53,22 +56,21 @@ class App extends React.Component {
           description: data.data[0].weather.description,
           temp: Math.round(data.data[0].temp),
           wind_speed: Math.round(data.data[0].wind_spd),
-          error: undefined
-        })
-      }
-      else {
-        this.setState({
-          name: undefined,
-          icon: undefined,
-          description: undefined,
-          temp: undefined,
-          wind_speed: undefined,
-          error: "Выберите сервис"
+          error: undefined,
+          checked: 'second'
         })
       }
     }
     catch (err) {
-      console.error(err.message);
+      this.setState({
+        name: undefined,
+        icon: undefined,
+        description: undefined,
+        temp: undefined,
+        wind_speed: undefined,
+        error: "Failed to get location",
+        checked: 'first'
+      })
     }
   }
 
@@ -78,7 +80,7 @@ class App extends React.Component {
     const city = document.getElementById('city').value;
     if (document.getElementById('first_api').checked) {
       if (city) {
-        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=metric&lang=ru`);
+        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=metric`);
         const data = await api_url.json();
 
         this.setState({
@@ -87,7 +89,8 @@ class App extends React.Component {
           description: data.weather[0].description,
           temp: Math.round(data.main.temp),
           wind_speed: Math.round(data.wind.speed),
-          error: undefined
+          error: undefined,
+          checked: 'first'
         })
       } else {
         this.setState({
@@ -96,12 +99,13 @@ class App extends React.Component {
           description: undefined,
           temp: undefined,
           wind_speed: undefined,
-          error: "Введите город"
+          error: "Enter city",
+          checked: 'first'
         })
       }
     } else if (document.getElementById('second_api').checked) {
       if (city) {
-        const api_url = await fetch(`https://api.weatherbit.io/v2.0/current?city=${city}&key=${API_SECOND}&lang=ru`);
+        const api_url = await fetch(`https://api.weatherbit.io/v2.0/current?city=${city}&key=${API_SECOND}`);
         const data = await api_url.json();
 
         this.setState({
@@ -110,7 +114,8 @@ class App extends React.Component {
           description: data.data[0].weather.description,
           temp: Math.round(data.data[0].temp),
           wind_speed: Math.round(data.data[0].wind_spd),
-          error: undefined
+          error: undefined,
+          checked: 'second'
         })
       } else {
         this.setState({
@@ -119,19 +124,17 @@ class App extends React.Component {
           description: undefined,
           temp: undefined,
           wind_speed: undefined,
-          error: "Введите город"
+          error: "Enter city",
+          checked: 'second'
         })
       }
-    } else {
-      this.setState({
-        name: undefined,
-        icon: undefined,
-        description: undefined,
-        temp: undefined,
-        wind_speed: undefined,
-        error: "Выберите сервис"
-      })
     }
+  }
+
+  handleOptionChange = (e) => {
+    this.setState({
+      checked: e.target.value
+    })
   }
 
   render() {
@@ -148,6 +151,8 @@ class App extends React.Component {
         <Form
           getWeatherByLocation={this.gettingWeatherByLocation}
           getWeatherByCity={this.gettingWeatherByCityName}
+          checked={this.state.checked}
+          handleOptionChange={this.handleOptionChange}
         />
       </div>
     );
