@@ -30,22 +30,22 @@ const Info = ({ name, icon, temp, description, wind_speed, error }) => {
     }
 
     let result;
-    if (name) {
-        result = <div className="info-block">
-            <p>{name}</p>
-            <div className="info-second">
-                <p>{temp}º</p>
-            </div>
-            <div className="info-first">
-                <img src={icon} alt="Icon" />
-                <p>{description}</p>
-            </div>
-        </div>
-    }
-    else if (error) {
+    if (error) {
         result = <div className="error-block">
             <img src="images/icons8-error-cloud-filled-100.png" alt="" />
             <p>{error}</p>
+        </div>
+    }
+    else if (name) {
+        result = <div className="info-block">
+        <p>{name}</p>
+        <div className="info-second">
+            <p>{temp}º</p>
+        </div>
+        <div className="info-first">
+            <img src={icon} alt="Icon" />
+            <p>{description}</p>
+        </div>
         </div>
     }
     else {
