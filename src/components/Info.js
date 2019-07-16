@@ -1,32 +1,58 @@
 import React from 'react';
-import { useCookies } from 'react-cookie';
+
+function compareTime(burnTime, nowTime) {
+    const compare = nowTime - burnTime;
+    return compare <= 7200000
+}
 
 const Info = ({ name, icon, temp, description, wind_speed, error }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(['name', 'description']);
+
+    if (!localStorage.getItem("options")) {
+        localStorage.setItem("options", JSON.stringify({ value: undefined, timestamp: undefined }));
+    }
+
     if (name) {
-        const date = new Date(new Date().getTime() + 7200 * 1000);
-        setCookie('name', name, { path: '/', expires: date });
-        setCookie('icon', icon, { path: '/', expires: date });
-        setCookie('temp', temp, { path: '/', expires: date });
-        setCookie('description', description, { path: '/', expires: date });
-        setCookie('wind_speed', wind_speed, { path: '/', expires: date });
+        const weather = {
+            name: name,
+            icon: icon,
+            temp: temp,
+            description: description,
+            wind_speed: wind_speed,
+            timestamp: new Date().getTime()
+        }
+        localStorage.setItem("options", JSON.stringify(weather));
     } else if (error) {
-        name = undefined;
-        icon = undefined;
-        temp = undefined;
-        description = undefined;
-        wind_speed = undefined;
-        removeCookie('name');
-        removeCookie('icon');
-        removeCookie('temp');
-        removeCookie('description');
-        removeCookie('wind_speed');
+        const weather = {
+            name: undefined,
+            icon: undefined,
+            temp: undefined,
+            description: undefined,
+            wind_speed: undefined,
+            timestamp: undefined
+        }
+        localStorage.setItem("options", JSON.stringify(weather));
     } else {
-        name = cookies.name;
-        icon = cookies.icon;
-        temp = cookies.temp;
-        description = cookies.description;
-        wind_speed = cookies.wind_speed;
+        const weather = JSON.parse(localStorage.getItem("options")),
+            dateString = weather.timestamp,
+            now = new Date().getTime().toString();
+        if (weather) {
+            if (!compareTime(dateString, now)) {
+                const weather = {
+                    name: undefined,
+                    icon: undefined,
+                    temp: undefined,
+                    description: undefined,
+                    wind_speed: undefined,
+                    timestamp: undefined
+                }
+                localStorage.setItem("options", JSON.stringify(weather));
+            }
+            name = weather.name;
+            icon = weather.icon;
+            temp = weather.temp;
+            description = weather.description;
+            wind_speed = weather.wind_speed;
+        }
     }
 
     let result;
@@ -38,14 +64,14 @@ const Info = ({ name, icon, temp, description, wind_speed, error }) => {
     }
     else if (name) {
         result = <div className="info-block">
-        <p>{name}</p>
-        <div className="info-second">
-            <p>{temp}º</p>
-        </div>
-        <div className="info-first">
-            <img src={icon} alt="Icon" />
-            <p>{description}</p>
-        </div>
+            <p>{name}</p>
+            <div className="info-second">
+                <p>{temp}º</p>
+            </div>
+            <div className="info-first">
+                <img src={icon} alt="Icon" />
+                <p>{description}</p>
+            </div>
         </div>
     }
     else {

@@ -81,7 +81,7 @@ class App extends React.Component {
     const openWeatherKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
     const weatherBitKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
     const city = document.getElementById('city').value;
-    
+      
     if (document.getElementById('first_api').checked) {
       if (city) {
         await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherKey}&units=metric`).then(response => {
@@ -122,7 +122,7 @@ class App extends React.Component {
       if (city) {
         await fetch(`https://api.weatherbit.io/v2.0/current?city=${city}&key=${weatherBitKey}`).then(response => {
           if (response.status === 500 || response.status === 204) {
-            this.setState({ error: 'ERROR' });
+            this.setState({ error: 'Error' });
             return;
           }
 
