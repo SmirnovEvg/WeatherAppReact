@@ -7,6 +7,11 @@ import './styles/media-quaries.sass';
 import Form from './components/Form.js';
 import Info from './components/Info.js';
 
+import { getOpenWeatherMapForecastByLocation } from "./helpers/OpenWeatherMap"
+import { getOpenWeatherMapForecastByCityname } from "./helpers/OpenWeatherMap"
+import { getWeatherBitForecastByLocation } from "./helpers/WeatherBit"
+import { getWeatherBitForecastByCityname } from "./helpers/WeatherBit"
+
 class App extends React.Component {
 
   state = {
@@ -20,9 +25,11 @@ class App extends React.Component {
   }
 
   gettingWeatherByLocation = async (e) => {
-    const openWeatherKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
-    const weatherBitKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
     e.preventDefault();
+
+    const openWeatherMapApiKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
+    const weatherBitApiKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
+    
     const getPosition = function (options) {
       return new Promise(function (resolve, reject) {
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -34,7 +41,7 @@ class App extends React.Component {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       if (document.getElementById('first_api').checked) {
-        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${openWeatherKey}&units=metric`);
+        const api_url = await getOpenWeatherMapForecastByLocation(lat, lon, openWeatherMapApiKey);
         const data = await api_url.json();
 
         this.setState({
@@ -47,7 +54,7 @@ class App extends React.Component {
           checked: 'first'
         })
       } else if (document.getElementById('second_api').checked) {
-        const api_url = await fetch(`https://api.weatherbit.io/v2.0/current?&lat=${lat}&lon=${lon}&key=${weatherBitKey}`);
+        const api_url = await getWeatherBitForecastByLocation(lat, lon, weatherBitApiKey);
         const data = await api_url.json();
 
         this.setState({
@@ -78,13 +85,13 @@ class App extends React.Component {
   gettingWeatherByCityName = async (e) => {
     e.preventDefault();
 
-    const openWeatherKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
-    const weatherBitKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
+    const openWeatherMapApiKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
+    const weatherBitApiKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
     const city = document.getElementById('city').value;
-      
+
     if (document.getElementById('first_api').checked) {
       if (city) {
-        await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherKey}&units=metric`).then(response => {
+        await getOpenWeatherMapForecastByCityname(city, openWeatherMapApiKey).then(response => {
           if (response.status === 500 || response.status === 204) {
             this.setState({ error: 'ERROR' });
             return;
@@ -120,7 +127,7 @@ class App extends React.Component {
       }
     } else if (document.getElementById('second_api').checked) {
       if (city) {
-        await fetch(`https://api.weatherbit.io/v2.0/current?city=${city}&key=${weatherBitKey}`).then(response => {
+        await getWeatherBitForecastByCityname(city, weatherBitApiKey).then(response => {
           if (response.status === 500 || response.status === 204) {
             this.setState({ error: 'Error' });
             return;
