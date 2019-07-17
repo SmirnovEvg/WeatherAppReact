@@ -7,23 +7,23 @@ const Form = ({ getWeatherByCity, getWeatherByLocation, checked, handleOptionCha
                 <div>
                     <div className="inputGroup">
                         <input type="radio"
-                            id="first_api"
+                            id="open-weather-api"
                             name="api"
-                            value="first"
-                            checked={checked === 'first'}
+                            value="openWeatherMap"
+                            checked={checked === 'openWeatherMap'}
                             onChange={handleOptionChange}
                         />
-                        <label htmlFor="first_api">OpenWeatherMap</label>
+                        <label htmlFor="open-weather-api">OpenWeatherMap</label>
                     </div>
                     <div className="inputGroup">
                         <input type="radio"
-                            id="second_api"
+                            id="weather-bit-api"
                             name="api"
-                            value="second"
-                            checked={checked === 'second'}
+                            value="weatherBit"
+                            checked={checked === 'weatherBit'}
                             onChange={handleOptionChange}
                         />
-                        <label htmlFor="second_api">WeatherBit</label>
+                        <label htmlFor="weather-bit-api">WeatherBit</label>
                     </div>
                 </div>
                 <div className="location-block">

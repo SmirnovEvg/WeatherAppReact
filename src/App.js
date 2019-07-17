@@ -21,7 +21,7 @@ class App extends React.Component {
     temp: undefined,
     wind_speed: undefined,
     error: undefined,
-    checked: 'first'
+    checked: 'openWeatherMap'
   }
 
   gettingWeatherByLocation = async (e) => {
@@ -29,7 +29,7 @@ class App extends React.Component {
 
     const openWeatherMapApiKey = process.env.REACT_APP_API_OPEN_WEATHER_MAP_API_KEY;
     const weatherBitApiKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
-    
+
     const getPosition = function (options) {
       return new Promise(function (resolve, reject) {
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -40,31 +40,31 @@ class App extends React.Component {
       const position = await getPosition();
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-      if (document.getElementById('first_api').checked) {
-        const api_url = await getOpenWeatherMapForecastByLocation(lat, lon, openWeatherMapApiKey);
-        const data = await api_url.json();
+      if (document.getElementById('open-weather-api').checked) {
+        const apiRequest = await getOpenWeatherMapForecastByLocation(lat, lon, openWeatherMapApiKey);
+        const apiOptions = await apiRequest.json();
 
         this.setState({
-          name: data.name,
-          icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-          description: data.weather[0].description,
-          temp: Math.round(data.main.temp),
-          wind_speed: Math.round(data.wind.speed),
+          name: apiOptions.name,
+          icon: `http://openweathermap.org/img/w/${apiOptions.weather[0].icon}.png`,
+          description: apiOptions.weather[0].description,
+          temp: Math.round(apiOptions.main.temp),
+          wind_speed: Math.round(apiOptions.wind.speed),
           error: undefined,
-          checked: 'first'
+          checked: 'openWeatherMap'
         })
-      } else if (document.getElementById('second_api').checked) {
-        const api_url = await getWeatherBitForecastByLocation(lat, lon, weatherBitApiKey);
-        const data = await api_url.json();
+      } else if (document.getElementById('weather-bit-api').checked) {
+        const apiRequest = await getWeatherBitForecastByLocation(lat, lon, weatherBitApiKey);
+        const apiOptions = await apiRequest.json();
 
         this.setState({
-          name: data.data[0].city_name,
-          icon: `https://www.weatherbit.io/static/img/icons/${data.data[0].weather.icon}.png`,
-          description: data.data[0].weather.description,
-          temp: Math.round(data.data[0].temp),
-          wind_speed: Math.round(data.data[0].wind_spd),
+          name: apiOptions.data[0].city_name,
+          icon: `https://www.weatherbit.io/static/img/icons/${apiOptions.data[0].weather.icon}.png`,
+          description: apiOptions.data[0].weather.description,
+          temp: Math.round(apiOptions.data[0].temp),
+          wind_speed: Math.round(apiOptions.data[0].wind_spd),
           error: undefined,
-          checked: 'second'
+          checked: 'weatherBit'
         })
       }
     }
@@ -76,7 +76,7 @@ class App extends React.Component {
         temp: undefined,
         wind_speed: undefined,
         error: "Failed to get location",
-        checked: 'first'
+        checked: 'openWeatherMap'
       })
     }
   }
@@ -89,27 +89,27 @@ class App extends React.Component {
     const weatherBitApiKey = process.env.REACT_APP_API_WEAHTER_BIT_API_KEY;
     const city = document.getElementById('city').value;
 
-    if (document.getElementById('first_api').checked) {
+    if (document.getElementById('open-weather-api').checked) {
       if (city) {
         await getOpenWeatherMapForecastByCityname(city, openWeatherMapApiKey).then(response => {
           if (response.status === 500 || response.status === 204) {
             this.setState({ error: 'ERROR' });
             return;
           }
-          response.json().then(data => {
-            if (data.cod === "404") {
-              this.setState({ error: data.message.toUpperCase() });
+          response.json().then(apiOptions => {
+            if (apiOptions.cod === "404") {
+              this.setState({ error: apiOptions.message.toUpperCase() });
               return;
             }
 
             this.setState({
-              name: data.name,
-              icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-              description: data.weather[0].description,
-              temp: Math.round(data.main.temp),
-              wind_speed: Math.round(data.wind.speed),
+              name: apiOptions.name,
+              icon: `http://openweathermap.org/img/w/${apiOptions.weather[0].icon}.png`,
+              description: apiOptions.weather[0].description,
+              temp: Math.round(apiOptions.main.temp),
+              wind_speed: Math.round(apiOptions.wind.speed),
               error: undefined,
-              checked: 'first'
+              checked: 'openWeatherMap'
             })
           })
         });
@@ -122,30 +122,30 @@ class App extends React.Component {
           temp: undefined,
           wind_speed: undefined,
           error: "Enter city",
-          checked: 'first'
+          checked: 'openWeatherMap'
         })
       }
-    } else if (document.getElementById('second_api').checked) {
+    } else if (document.getElementById('weather-bit-api').checked) {
       if (city) {
         await getWeatherBitForecastByCityname(city, weatherBitApiKey).then(response => {
           if (response.status === 500 || response.status === 204) {
-            this.setState({ error: 'Error' });
+            this.setState({ error: 'ERROR' });
             return;
           }
 
-          response.json().then(weatherData => {
-            if (weatherData.cod === "404") {
-              this.setState({ error: weatherData.message.toUpperCase() });
+          response.json().then(apiOptions => {
+            if (apiOptions.cod === "404") {
+              this.setState({ error: apiOptions.message.toUpperCase() });
               return;
             }
             this.setState({
-              name: weatherData.data[0].city_name,
-              icon: `https://www.weatherbit.io/static/img/icons/${weatherData.data[0].weather.icon}.png`,
-              description: weatherData.data[0].weather.description,
-              temp: Math.round(weatherData.data[0].temp),
-              wind_speed: Math.round(weatherData.data[0].wind_spd),
+              name: apiOptions.data[0].city_name,
+              icon: `https://www.weatherbit.io/static/img/icons/${apiOptions.data[0].weather.icon}.png`,
+              description: apiOptions.data[0].weather.description,
+              temp: Math.round(apiOptions.data[0].temp),
+              wind_speed: Math.round(apiOptions.data[0].wind_spd),
               error: undefined,
-              checked: 'second'
+              checked: 'weatherBit'
             });
           })
         });
@@ -158,7 +158,7 @@ class App extends React.Component {
           temp: undefined,
           wind_speed: undefined,
           error: "Enter city",
-          checked: 'second'
+          checked: 'weatherBit'
         })
       }
     }
